@@ -1,0 +1,17 @@
+# NEVER commit customer data or secrets
+*.db
+*.db-wal
+*.db-shm
+*.bak
+_hls_secret
+backups/
+logs/
+uploads/
+machine_files/
+files/
+*.csv
+.env
+__pycache__/
+*.pyc
+.git
+.github

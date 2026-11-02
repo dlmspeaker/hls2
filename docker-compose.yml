@@ -1,0 +1,25 @@
+services:
+  hls:
+    image: ghcr.io/${GITHUB_REPO:-OWNER/REPO}:latest
+    build: .
+    restart: unless-stopped
+    environment:
+      HLS_STRICT_AUTH: "1"
+      PORT: "8080"
+      # SMTP_HOST: smtp.gmail.com
+      # SMTP_USER: you@example.com
+      # SMTP_PASS: app-password
+    volumes:
+      - hls_data:/data
+    expose: ["8080"]
+  caddy:                       # automatic HTTPS. Set DOMAIN in .env (e.g. hls.yourcompany.lk)
+    image: caddy:2
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    command: caddy reverse-proxy --from ${DOMAIN:-:80} --to hls:8080
+    volumes:
+      - caddy_data:/data
+    depends_on: [hls]
+volumes:
+  hls_data:
+  caddy_data:
